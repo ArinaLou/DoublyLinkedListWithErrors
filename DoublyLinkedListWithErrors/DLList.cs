@@ -26,10 +26,10 @@ namespace DoublyLinkedListWithErrors
             }
             else
             {
-                tail.next = p;
-                tail = p;
-                p.previous = tail;
-            }
+				tail.next = p;
+				p.previous = tail;
+				tail = p;
+			}
         } // end of addToTail
 
         public void addToHead(DLLNode p)
@@ -41,55 +41,72 @@ namespace DoublyLinkedListWithErrors
             }
             else
             {
-                p.next = this.head;
-                this.head.previous = p;
-                head = p;
-            }
+				p.next = head;
+				head.previous = p;
+				head = p;
+			}
         } // end of addToHead
 
         public void removHead()
         {
-            if (this.head == null) return;
-            this.head = this.head.next;
-            this.head.previous = null;
-        } // removeHead
+			if (head == tail)
+			{
+				head = null;
+				tail = null;
+			}
+			else
+			{
+				head = head.next;
+				head.previous = null;
+			}
+		} // removeHead
 
         public void removeTail()
         {
-            if (this.tail == null) return;
-            if (this.head == this.tail)
-            {
-                this.head = null;
-                this.tail = null;
-                return;
-            }
-        } // remove tail
+			if (this.head == this.tail || this.head == null || this.tail == null)
+			{
+				this.head = null;
+				this.tail = null;
+			}
+			else
+			{
+				tail = tail.previous;
+				tail.next = null;
+			}
+		} // remove tail
 
         /*-------------------------------------------------
          * Return null if the string does not exist.
          * ----------------------------------------------*/
         public DLLNode search(int num)
         {
-            DLLNode p = head;
-            while (p != null)
-            {
-                p = p.next;
-                if (p.num == num) break;
-            }
-            return (p);
-        } // end of search (return pionter to the node);
+			DLLNode p = head;
+			while (p != null)
+			{
+				if (p.num == num) break;
+				p = p.next;
+			}
+			return (p);
+		} // end of search (return pionter to the node);
 
         public void removeNode(DLLNode p)
         { // removing the node p.
-
-            if (p.next == null)
-            {
-                this.tail = this.tail.previous;
-                this.tail.next = null;
-                p.previous = null;
-                return;
-            }
-            if (p.previous == null)
+			if (p.next == null)
+			{
+				if (p.previous != null) // check if list has more than one node
+				{
+					this.tail = p.previous;
+					this.tail.next = null;
+					p.previous = null;
+				}
+				else // list only has one node
+				{
+					this.head = null;
+					this.tail = null;
+				}
+				return;
+			}
+			if (p.previous == null)
             {
                 this.head = this.head.next;
                 p.next = null;
@@ -110,8 +127,8 @@ namespace DoublyLinkedListWithErrors
             while (p != null)
             {
                 tot += p.num;
-                p = p.next.next;
-            }
+				p = p.next;
+			}
             return (tot);
         } // end of total
     } // end of DLList class
